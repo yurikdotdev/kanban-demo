@@ -1,12 +1,15 @@
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { DndContext } from '@dnd-kit/core';
-import { useState } from 'react';
 import { generateId } from '../lib/utils';
 import { ColumnType } from '../types';
 import Column from './Column';
 import { Button } from './ui/button';
 
 function KanbanBoard() {
-  const [columns, setColumns] = useState<ColumnType[]>([]);
+  const [columns, setColumns] = useLocalStorage<ColumnType[]>(
+    'COLUMN_DATA',
+    []
+  );
 
   function createColumn() {
     const newColumn: ColumnType = {
