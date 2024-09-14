@@ -1,44 +1,9 @@
-import useLocalStorage from '@/hooks/useLocalStorage';
 import { DndContext } from '@dnd-kit/core';
-import { generateId } from '../lib/utils';
-import { ColumnType } from '../types';
 import Column from './Column';
-import { Button } from './ui/button';
+import useColumn from '@/hooks/useColumn';
 
 function KanbanBoard() {
-  const [columns, setColumns] = useLocalStorage<ColumnType[]>(
-    'COLUMN_DATA',
-    []
-  );
-
-  function createColumn() {
-    const newColumn: ColumnType = {
-      id: generateId(),
-      title: 'New Column',
-    };
-
-    setColumns([...columns, newColumn]);
-
-    console.log('column created');
-  }
-
-  function deleteColumn(id: string) {
-    setColumns(columns.filter((column) => column.id !== id));
-
-    console.log('column deleted');
-  }
-
-  function updateColumn(id: string, title: string) {
-    const updatedColumns = columns.map((column) => {
-      if (column.id !== id) {
-        return column;
-      } else {
-        return { ...column, title };
-      }
-    });
-
-    setColumns(updatedColumns);
-  }
+  const { columns, createColumn, deleteColumn, updateColumn } = useColumn();
 
   return (
     <>
@@ -58,8 +23,7 @@ function KanbanBoard() {
             : null}
         </div>
       </DndContext>
-
-      <Button onClick={createColumn}>Add Column</Button>
+      <button onClick={createColumn}>Add Column</button>
     </>
   );
 }
