@@ -1,4 +1,5 @@
 import useColumn from '@/hooks/useColumn';
+import useTask from '@/hooks/useTask';
 import {
   DndContext,
   DragEndEvent,
@@ -16,13 +17,16 @@ function KanbanBoard() {
   const {
     columns,
     setColumns,
-    columnsId,
     activeColumn,
     setActiveColumn,
     createColumn,
     deleteColumn,
     updateColumn,
   } = useColumn();
+
+  const { tasks, createTask, deleteTask, editTask } = useTask();
+
+  const columnsId = columns.map((column) => column.id);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -85,6 +89,12 @@ function KanbanBoard() {
                       column={column}
                       deleteColumn={deleteColumn}
                       updateColumn={updateColumn}
+                      tasks={tasks.filter(
+                        (tasks) => tasks.columnId === column.id
+                      )}
+                      createTask={createTask}
+                      deleteTask={deleteTask}
+                      editTask={editTask}
                     />
                   );
                 })
@@ -98,6 +108,12 @@ function KanbanBoard() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                tasks={tasks.filter(
+                  (tasks) => tasks.columnId === activeColumn.id
+                )}
+                createTask={createTask}
+                deleteTask={deleteTask}
+                editTask={editTask}
               />
             ) : null}
           </DragOverlay>,

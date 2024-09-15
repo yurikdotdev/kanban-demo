@@ -1,16 +1,30 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
-import type { ColumnType } from '../types';
+import type { ColumnType, TaskType } from '../types';
+import Task from './Task';
 
 interface Props {
   column: ColumnType;
   deleteColumn: (id: string) => void;
   updateColumn: (id: string, title: string) => void;
+
+  tasks: TaskType[];
+  createTask: (id: string) => void;
+  deleteTask: (id: string) => void;
+  editTask: (id: string, content: string) => void;
 }
 
 function Column(props: Props) {
-  const { column, deleteColumn, updateColumn } = props;
+  const {
+    column,
+    deleteColumn,
+    updateColumn,
+    tasks,
+    createTask,
+    deleteTask,
+    editTask,
+  } = props;
   const { id, title } = column;
 
   const [editMode, setEditMode] = useState(false);
@@ -41,7 +55,7 @@ function Column(props: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex h-96 min-h-96 w-80 flex-col overflow-hidden rounded-lg border-dashed border-2 border-gray-300 bg-gray-400 opacity-50"
+        className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-400 opacity-50"
       ></div>
     );
   }
@@ -50,7 +64,7 @@ function Column(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex h-96 min-h-96 w-80 flex-col overflow-hidden rounded-lg bg-gray-400"
+      className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg bg-gray-400"
     >
       <div
         className="item-center flex w-full justify-between bg-green-300 p-4"
@@ -78,8 +92,18 @@ function Column(props: Props) {
         )}
         <button onClick={() => deleteColumn(id)}>x</button>
       </div>
-      <div className="flex flex-grow flex-col justify-between bg-red-200 p-6">
-        Content
+      <div className="flex flex-grow flex-col items-center justify-between gap-4 bg-red-300 p-4">
+        {tasks.map((task) => {
+          return (
+            <Task
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              editTask={editTask}
+            />
+          );
+        })}
+        <button onClick={() => createTask(id)}>Add Task</button>
       </div>
     </div>
   );

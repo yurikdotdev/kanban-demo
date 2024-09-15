@@ -1,17 +1,12 @@
 import { generateId } from '@/lib/utils';
 import { ColumnType } from '@/types';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 
 function useColumn() {
   const [columns, setColumns] = useLocalStorage<ColumnType[]>(
     'COLUMN_DATA',
     []
-  );
-
-  const columnsId = useMemo(
-    () => columns.map((column) => column.id),
-    [columns]
   );
 
   const [activeColumn, setActiveColumn] = useState<ColumnType | null>(null);
@@ -44,7 +39,6 @@ function useColumn() {
   return {
     columns,
     setColumns,
-    columnsId,
     activeColumn,
     setActiveColumn,
     createColumn,
