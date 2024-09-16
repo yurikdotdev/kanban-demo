@@ -5,6 +5,6 @@ export type ColumnType = {
 
 export type TaskType = {
   id: string;
-  columnId: string;
+  columnId: string | number;
   content: string;
 };

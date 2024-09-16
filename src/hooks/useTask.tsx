@@ -1,14 +1,17 @@
 import { generateId } from '@/lib/utils';
 import { TaskType } from '@/types';
+import { useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 
 function useTask() {
   const [tasks, setTasks] = useLocalStorage<TaskType[]>('TASK_DATA', []);
 
+  const [activeTask, setActiveTask] = useState<TaskType | null>(null);
+
   function createTask(columnId: string) {
     const newTask: TaskType = {
       id: generateId(),
-      columnId: columnId,
+      columnId,
       content: `${tasks.length + 1}`,
     };
 
@@ -17,6 +20,10 @@ function useTask() {
 
   function deleteTask(id: string) {
     setTasks(tasks.filter((task) => task.id !== id));
+  }
+
+  function deleteTasksByColumnId(columnId: string) {
+    setTasks(tasks.filter((task) => task.columnId !== columnId));
   }
 
   function editTask(id: string, content: string) {
@@ -34,8 +41,11 @@ function useTask() {
   return {
     tasks,
     setTasks,
+    activeTask,
+    setActiveTask,
     createTask,
     deleteTask,
+    deleteTasksByColumnId,
     editTask,
   };
 }

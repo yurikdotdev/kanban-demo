@@ -1,4 +1,4 @@
-import { useSortable } from '@dnd-kit/sortable';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import type { ColumnType, TaskType } from '../types';
@@ -20,6 +20,7 @@ function Column(props: Props) {
     column,
     deleteColumn,
     updateColumn,
+
     tasks,
     createTask,
     deleteTask,
@@ -27,7 +28,9 @@ function Column(props: Props) {
   } = props;
   const { id, title } = column;
 
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+
+  const taskId = tasks.map((task) => task.id);
 
   const {
     setNodeRef,
@@ -88,21 +91,26 @@ function Column(props: Props) {
             className="w-full bg-green-300"
           />
         ) : (
-          <>{title}</>
+          <h1>{title}</h1>
         )}
         <button onClick={() => deleteColumn(id)}>x</button>
       </div>
-      <div className="flex flex-grow flex-col items-center justify-between gap-4 bg-red-300 p-4">
-        {tasks.map((task) => {
-          return (
-            <Task
-              key={task.id}
-              task={task}
-              deleteTask={deleteTask}
-              editTask={editTask}
-            />
-          );
-        })}
+
+      <div className="flex flex-col items-center gap-4 bg-red-300 p-4">
+        <SortableContext items={taskId}>
+          {tasks.length
+            ? tasks.map((task) => {
+                return (
+                  <Task
+                    key={task.id}
+                    task={task}
+                    deleteTask={deleteTask}
+                    editTask={editTask}
+                  />
+                );
+              })
+            : 'No Tasks'}
+        </SortableContext>
         <button onClick={() => createTask(id)}>Add Task</button>
       </div>
     </div>
