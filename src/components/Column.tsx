@@ -3,16 +3,17 @@ import { CSS } from '@dnd-kit/utilities';
 import { useState } from 'react';
 import type { ColumnType, TaskType } from '../types';
 import Task from './Task';
+import { Button } from './ui/button';
 
 interface Props {
   column: ColumnType;
-  deleteColumn: (id: string) => void;
-  updateColumn: (id: string, title: string) => void;
+  deleteColumn: (columnId: string) => void;
+  updateColumn: (columnId: string, title: string) => void;
 
   tasks: TaskType[];
-  createTask: (id: string) => void;
-  deleteTask: (id: string) => void;
-  editTask: (id: string, content: string) => void;
+  createTask: (columnId: string) => void;
+  deleteTask: (taskId: string) => void;
+  editTask: (taskId: string, content: string) => void;
 }
 
 function Column(props: Props) {
@@ -26,6 +27,7 @@ function Column(props: Props) {
     deleteTask,
     editTask,
   } = props;
+
   const { id, title } = column;
 
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -58,7 +60,7 @@ function Column(props: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-400 opacity-50"
+        className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-400 opacity-10"
       ></div>
     );
   }
@@ -67,10 +69,10 @@ function Column(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg bg-gray-400"
+      className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed"
     >
       <div
-        className="item-center flex w-full justify-between bg-green-300 p-4"
+        className="item-center flex w-full justify-between bg-slate-100 p-4"
         onClick={() => setEditMode(true)}
         {...attributes}
         {...listeners}
@@ -88,18 +90,19 @@ function Column(props: Props) {
                 setEditMode(false);
               }
             }}
-            className="w-full bg-green-300"
+            className="w-full"
           />
         ) : (
-          <h1>{title}</h1>
+          <h1 className="text-large font-mono font-semibold">{title}</h1>
         )}
         <button onClick={() => deleteColumn(id)}>x</button>
       </div>
 
-      <div className="flex flex-col items-center gap-4 bg-red-300 p-4">
-        <SortableContext items={taskId}>
-          {tasks.length
-            ? tasks.map((task) => {
+      <div className="flex flex-grow flex-col justify-between gap-4 p-2">
+        <div className="flex flex-col gap-2">
+          <SortableContext items={taskId}>
+            {tasks.length ? (
+              tasks.map((task) => {
                 return (
                   <Task
                     key={task.id}
@@ -109,10 +112,13 @@ function Column(props: Props) {
                   />
                 );
               })
-            : 'No Tasks'}
-        </SortableContext>
-        <button onClick={() => createTask(id)}>Add Task</button>
+            ) : (
+              <div className="p-12 text-center">No Tasks</div>
+            )}
+          </SortableContext>
+        </div>
       </div>
+      <Button onClick={() => createTask(id)}>Add Task</Button>
     </div>
   );
 }

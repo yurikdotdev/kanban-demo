@@ -23,16 +23,15 @@ function useColumn() {
     setColumns([...columns, newColumn]);
   }
 
-  function deleteColumn(id: string) {
-    deleteTasksByColumnId(id)
-    
-    setColumns(columns.filter((column) => column.id !== id));
-    
+  function deleteColumn(columnId: string) {
+    deleteTasksByColumnId(columnId);
+
+    setColumns(columns.filter((column) => column.id !== columnId));
   }
 
-  function updateColumn(id: string, title: string) {
+  function updateColumn(columnId: string, title: string) {
     const updatedColumns = columns.map((column) => {
-      if (column.id !== id) {
+      if (column.id !== columnId) {
         return column;
       } else {
         return { ...column, title };

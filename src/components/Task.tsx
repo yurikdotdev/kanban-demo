@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 interface Props {
   task: TaskType;
-  deleteTask: (id: string) => void;
-  editTask: (id: string, content: string) => void;
+  deleteTask: (taskId: string) => void;
+  editTask: (taskId: string, content: string) => void;
 }
 
 function Task(props: Props) {
@@ -44,7 +44,7 @@ function Task(props: Props) {
     return (
       <div
         ref={setNodeRef}
-        className="border-grey-400 flex h-20 w-full items-center justify-between border-2 border-dashed bg-gray-300 p-4 opacity-80"
+        className="border-grey-400 flex h-20 w-full items-center justify-between border-2 border-dashed bg-gray-300 p-4 opacity-20"
       ></div>
     );
   }

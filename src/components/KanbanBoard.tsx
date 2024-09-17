@@ -14,6 +14,7 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
 import Column from './Column';
 import Task from './Task';
+import { Button } from './ui/button';
 
 function KanbanBoard() {
   const {
@@ -135,6 +136,10 @@ function KanbanBoard() {
     }
   }
 
+  function filteredTask(columnId: string) {
+    return tasks.filter((task) => task.columnId === columnId);
+  }
+
   return (
     <>
       <DndContext
@@ -145,24 +150,26 @@ function KanbanBoard() {
       >
         <div className="flex gap-4">
           <SortableContext items={columnsId}>
-            {columns.length
-              ? columns.map((column) => {
-                  return (
-                    <Column
-                      key={column.id}
-                      column={column}
-                      deleteColumn={deleteColumn}
-                      updateColumn={updateColumn}
-                      tasks={tasks.filter(
-                        (tasks) => tasks.columnId === column.id
-                      )}
-                      createTask={createTask}
-                      deleteTask={deleteTask}
-                      editTask={editTask}
-                    />
-                  );
-                })
-              : null}
+            {columns.length ? (
+              columns.map((column) => {
+                return (
+                  <Column
+                    key={column.id}
+                    column={column}
+                    deleteColumn={deleteColumn}
+                    updateColumn={updateColumn}
+                    tasks={filteredTask(column.id)}
+                    createTask={createTask}
+                    deleteTask={deleteTask}
+                    editTask={editTask}
+                  />
+                );
+              })
+            ) : (
+              <p className="mx-auto text-center text-2xl">
+                There's nothing here.
+              </p>
+            )}
           </SortableContext>
         </div>
 
@@ -173,9 +180,7 @@ function KanbanBoard() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
-                tasks={tasks.filter(
-                  (tasks) => tasks.columnId === activeColumn.id
-                )}
+                tasks={filteredTask(activeColumn.id)}
                 createTask={createTask}
                 deleteTask={deleteTask}
                 editTask={editTask}
@@ -192,7 +197,7 @@ function KanbanBoard() {
           document.body
         )}
       </DndContext>
-      <button onClick={createColumn}>Add Column</button>
+      <Button onClick={createColumn}>Add Column</Button>
     </>
   );
 }
