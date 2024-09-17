@@ -1,12 +1,17 @@
 import { generateId } from '@/lib/utils';
 import { TaskType } from '@/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 
 function useTask() {
   const [tasks, setTasks] = useLocalStorage<TaskType[]>('TASK_DATA', []);
 
+  const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([]);
   const [activeTask, setActiveTask] = useState<TaskType | null>(null);
+
+  useEffect(() => {
+    setFilteredTasks(tasks);
+  }, [tasks]);
 
   function createTask(columnId: string) {
     const newTask: TaskType = {
@@ -27,19 +32,28 @@ function useTask() {
   }
 
   function editTask(taskId: string, content: string) {
-    const updatedTasks = tasks.map((task) => {
-      if (task.id !== taskId) {
-        return task;
-      } else {
-        return { ...task, content };
-      }
-    });
+    const updatedTasks = tasks.map((task) =>
+      task.id !== taskId ? task : { ...task, content }
+    );
 
     setTasks(updatedTasks);
   }
 
+  function searchTask(query: string) {
+    if (!query) {
+      setFilteredTasks(tasks);
+      return;
+    }
+
+    const filtered = tasks.filter((task) =>
+      task.content.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setFilteredTasks(filtered);
+  }
+
   return {
-    tasks,
+    tasks: filteredTasks,
     setTasks,
     activeTask,
     setActiveTask,
@@ -47,6 +61,7 @@ function useTask() {
     deleteTask,
     deleteTasksByColumnId,
     editTask,
+    searchTask,
   };
 }
 
