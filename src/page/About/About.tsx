@@ -8,7 +8,7 @@ function About() {
       </h1>
       <img
         className="max-w-sm"
-        src="public/assets/uwu.webp"
+        src="public/static/uwu.webp"
         alt="NO MORE UWU"
       />
     </div>
