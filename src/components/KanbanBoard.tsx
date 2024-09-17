@@ -11,6 +11,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
+import { Search } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import Column from './Column';
 import Task from './Task';
@@ -163,18 +164,21 @@ function KanbanBoard() {
             <h1 className="text-3xl font-bold">Kanban</h1>
             <p>Simple Kanban Demo</p>
           </div>
-          <input
-            type="text"
-            className="h-fit w-72 rounded-lg bg-gray-100 p-2 text-center outline-none dark:bg-gray-300"
-            placeholder="Search task"
-            onChange={(e) => searchTask(e.target.value)}
-            autoFocus
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                searchTask(e.currentTarget.value);
-              }
-            }}
-          />
+          <div className='flex flex-row gap-2 items-center'>
+            <input
+              type="text"
+              className="h-fit w-72 rounded-lg bg-gray-100 p-2 text-center outline-none dark:bg-gray-300"
+              placeholder="Search task"
+              onChange={(e) => searchTask(e.target.value)}
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  searchTask(e.currentTarget.value);
+                }
+              }}
+            />
+            <Search className="text-gray-400" />
+          </div>
         </div>
         <div className="flex gap-4">
           <SortableContext items={columnsId}>
