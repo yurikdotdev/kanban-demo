@@ -158,14 +158,14 @@ function KanbanBoard() {
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
       >
-        <div className="flex w-full items-center justify-evenly">
+        <div className="flex w-full items-center justify-evenly dark:text-white">
           <div>
             <h1 className="text-3xl font-bold">Kanban</h1>
             <p>Simple Kanban Demo</p>
           </div>
           <input
             type="text"
-            className="h-fit w-72 rounded-lg bg-gray-100 p-2 text-center outline-none"
+            className="h-fit w-72 rounded-lg bg-gray-100 p-2 text-center outline-none dark:bg-gray-300"
             placeholder="Search task"
             onChange={(e) => searchTask(e.target.value)}
             autoFocus

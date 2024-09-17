@@ -1,6 +1,7 @@
 import { TaskType } from '@/types';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Trash2Icon } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
@@ -52,7 +53,7 @@ function Task(props: Props) {
   return (
     <div
       id={id}
-      className="flex h-20 w-full items-center justify-between bg-gray-100 p-4"
+      className="group relative flex h-20 w-full items-center justify-between bg-gray-100 p-4"
       onClick={toggleEditMode}
       ref={setNodeRef}
       style={style}
@@ -70,12 +71,20 @@ function Task(props: Props) {
               toggleEditMode();
             }
           }}
-          className="w-full bg-green-300"
+          className="w-full bg-gray-100 outline-none"
         />
       ) : (
         <p>{content}</p>
       )}
-      <button onClick={() => deleteTask(id)}>Delete</button>
+      <Trash2Icon
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteTask(id);
+        }}
+        className="absolute right-5 top-1/2 -translate-y-1/2 transform text-sm text-red-700 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      >
+        Delete
+      </Trash2Icon>
     </div>
   );
 }

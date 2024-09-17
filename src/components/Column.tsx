@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { ColumnType, TaskType } from '../types';
 import Task from './Task';
 import { Button } from './ui/button';
+import { X } from 'lucide-react';
 
 interface Props {
   column: ColumnType;
@@ -60,7 +61,7 @@ function Column(props: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-400 opacity-10"
+        className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-400 opacity-10 dark:bg-white dark:opacity-50"
       ></div>
     );
   }
@@ -69,7 +70,7 @@ function Column(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed"
+      className="flex min-h-96 w-80 flex-col overflow-hidden rounded-lg border-2 border-dashed dark:bg-white dark:opacity-90"
     >
       <div
         className="item-center flex w-full justify-between bg-slate-100 p-4"
@@ -90,33 +91,29 @@ function Column(props: Props) {
                 setEditMode(false);
               }
             }}
-            className="w-full"
+            className="text-large w-full bg-slate-100 font-semibold outline-none"
           />
         ) : (
-          <h1 className="text-large font-mono font-semibold">{title}</h1>
+          <h1 className="text-large w-full font-bold">{title}</h1>
         )}
-        <button onClick={() => deleteColumn(id)}>x</button>
+        <X className='text-red-500' onClick={() => deleteColumn(id)}>x</X>
       </div>
 
-      <div className="flex flex-grow flex-col justify-between gap-4 p-2">
-        <div className="flex flex-col gap-2">
-          <SortableContext items={taskId}>
-            {tasks.length ? (
-              tasks.map((task) => {
-                return (
-                  <Task
-                    key={task.id}
-                    task={task}
-                    deleteTask={deleteTask}
-                    editTask={editTask}
-                  />
-                );
-              })
-            ) : (
-              <div className="p-12 text-center">No Tasks</div>
-            )}
-          </SortableContext>
-        </div>
+      <div className="flex flex-grow flex-col gap-4 p-2">
+        <SortableContext items={taskId}>
+          {tasks.length ? (
+            tasks.map((task) => (
+              <Task
+                key={task.id}
+                task={task}
+                deleteTask={deleteTask}
+                editTask={editTask}
+              />
+            ))
+          ) : (
+            <div className="p-12 text-center">No Tasks</div>
+          )}
+        </SortableContext>
       </div>
       <Button onClick={() => createTask(id)}>Add Task</Button>
     </div>
