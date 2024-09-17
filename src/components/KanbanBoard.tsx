@@ -117,9 +117,13 @@ function KanbanBoard() {
         const activeIndex = tasks.findIndex((task) => task.id === activeId);
         const overIndex = tasks.findIndex((task) => task.id === overId);
 
-        tasks[activeIndex].columnId = tasks[overIndex].columnId;
+        const updatedTasks = [...tasks];
+        updatedTasks[activeIndex] = {
+          ...updatedTasks[activeIndex],
+          columnId: updatedTasks[overIndex].columnId,
+        };
 
-        return arrayMove(tasks, activeIndex, overIndex);
+        return arrayMove(updatedTasks, activeIndex, overIndex);
       });
     }
 
@@ -129,9 +133,14 @@ function KanbanBoard() {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((task) => task.id === activeId);
 
-        tasks[activeIndex].columnId = overId;
+        const updatedTasks = [...tasks];
 
-        return arrayMove(tasks, activeIndex, activeIndex);
+        updatedTasks[activeIndex] = {
+          ...updatedTasks[activeIndex],
+          columnId: overId,
+        };
+
+        return arrayMove(updatedTasks, activeIndex, activeIndex);
       });
     }
   }
